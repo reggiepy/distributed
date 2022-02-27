@@ -1,6 +1,7 @@
 package registry
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -16,13 +17,51 @@ const (
 
 type registry struct {
 	registrations []Registration
-	mux           *sync.Mutex
+	mux           *sync.RWMutex
 }
 
 func (r *registry) add(reg Registration) error {
 	r.mux.Lock()
 	defer r.mux.Unlock()
 	r.registrations = append(r.registrations, reg)
+	err := r.sendRequiredServices(reg)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *registry) sendRequiredServices(reg Registration) error {
+	r.mux.RLock()
+	defer r.mux.RUnlock()
+
+	var p patch
+	for _, serviceReg := range r.registrations {
+		for _, reqService := range reg.RequireServices {
+			if serviceReg.ServiceName == reqService {
+				p.Added = append(p.Added, patchEntry{
+					Name: serviceReg.ServiceName,
+					URL:  serviceReg.ServiceURL,
+				})
+			}
+		}
+	}
+	err := r.sendPatch(p, reg.ServiceUpdateURL)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *registry) sendPatch(p patch, url string) error {
+	d, err := json.Marshal(p)
+	if err != nil {
+		return err
+	}
+	_, err = http.Post(url, "application/json", bytes.NewBuffer(d))
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -40,7 +79,7 @@ func (r *registry) remove(url string) error {
 
 var reg = registry{
 	registrations: make([]Registration, 0),
-	mux:           new(sync.Mutex),
+	mux:           new(sync.RWMutex),
 }
 
 type RegistryService struct{}
