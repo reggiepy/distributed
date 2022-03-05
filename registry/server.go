@@ -22,8 +22,9 @@ type registry struct {
 
 func (r *registry) add(reg Registration) error {
 	r.mux.Lock()
-	defer r.mux.Unlock()
 	r.registrations = append(r.registrations, reg)
+	r.mux.Unlock()
+	// 再 registrations 中查找 require service 兵 发送
 	err := r.sendRequiredServices(reg)
 	if err != nil {
 		return err

@@ -25,8 +25,10 @@ func (h studentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	pathSegments := strings.Split(r.URL.Path, "/")
 	switch len(pathSegments) {
 	case 2:
+		log.Println("get all")
 		h.getAll(w, r)
 	case 3:
+		log.Println("get one")
 		id, err := strconv.Atoi(pathSegments[2])
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -34,6 +36,7 @@ func (h studentHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 		h.getOne(w, r, id)
 	case 4:
+		log.Println("add grade")
 		id, err := strconv.Atoi(pathSegments[2])
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

@@ -16,6 +16,7 @@ func RegisterService(r Registration) error {
 	if err != nil {
 		return err
 	}
+	//注册处理patchEntry的方法，再下面服务注册成功后，会发送依赖服务请求来更新prov
 	http.Handle(serviceURL.Path, &serviceUpdateHandler{})
 	buf := new(bytes.Buffer)
 	enc := json.NewEncoder(buf)
@@ -23,6 +24,7 @@ func RegisterService(r Registration) error {
 	if err != nil {
 		return err
 	}
+	// 注册服务到 registry server 中
 	res, err := http.Post(ServicesURL, "application/json", buf)
 	if err != nil {
 		return err
@@ -36,6 +38,7 @@ func RegisterService(r Registration) error {
 
 type serviceUpdateHandler struct{}
 
+// 每个服务都会注册这个方法，在服务注册成功后，会发送请求将依赖增加或删除更新到prov
 func (suh serviceUpdateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -46,7 +49,7 @@ func (suh serviceUpdateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 	err := dec.Decode(&p)
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	prov.Update(p)
