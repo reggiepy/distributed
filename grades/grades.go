@@ -28,8 +28,6 @@ var (
 )
 
 func (ss Students) GetByID(id int) (*Student, error) {
-	studentsMutex.Lock()
-	defer studentsMutex.Unlock()
 	for i := range ss {
 		if ss[i].ID == id {
 			return &ss[i], nil
