@@ -47,6 +47,7 @@ func startService(ctx context.Context, serviceName registry.ServiceName, host, p
 	}()
 	go func() {
 		signalChan := make(chan os.Signal, 1)
+		//cleanupDone := make(chan bool)
 		signal.Notify(signalChan, os.Interrupt)
 		select {
 		case <-signalChan:
@@ -56,7 +57,9 @@ func startService(ctx context.Context, serviceName registry.ServiceName, host, p
 				log.Println(err)
 			}
 			cancel()
+			//cleanupDone <- true
 		}
+		//<-cleanupDone
 	}()
 	return ctx
 }

@@ -25,7 +25,10 @@ func main() {
 		fmt.Println("Registry service started. Press any key to stop")
 		var s string
 		_, _ = fmt.Scanln(&s)
-		_ = srv.Shutdown(ctx)
+		err := srv.Shutdown(ctx)
+		if err != nil {
+			log.Println(err)
+		}
 		cancel()
 	}()
 	go func() {
@@ -33,7 +36,10 @@ func main() {
 		signal.Notify(signalChan, os.Interrupt)
 		select {
 		case <-signalChan:
-			_ = srv.Shutdown(ctx)
+			err := srv.Shutdown(ctx)
+			if err != nil {
+				log.Println(err)
+			}
 			cancel()
 		}
 	}()

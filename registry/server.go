@@ -33,7 +33,6 @@ func (r *registry) add(reg Registration) error {
 				URL:  reg.ServiceURL,
 			},
 		},
-		Removed: []patchEntry{},
 	})
 	return err
 }
@@ -105,11 +104,19 @@ func (r *registry) sendPatch(p patch, url string) error {
 }
 
 func (r *registry) remove(url string) error {
-	r.mux.Lock()
-	defer r.mux.Unlock()
-	for index, reg := range r.registrations {
-		if reg.ServiceURL == url {
+	for index := range r.registrations {
+		if r.registrations[index].ServiceURL == url {
+			r.notify(patch{
+				Removed: []patchEntry{
+					patchEntry{
+						Name: r.registrations[index].ServiceName,
+						URL:  r.registrations[index].ServiceURL,
+					},
+				},
+			})
+			r.mux.Lock()
 			r.registrations = append(r.registrations[:index], r.registrations[index+1:]...)
+			r.mux.Unlock()
 			return nil
 		}
 	}
