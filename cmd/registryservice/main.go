@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 )
 
 func main() {
@@ -25,7 +27,15 @@ func main() {
 		_, _ = fmt.Scanln(&s)
 		_ = srv.Shutdown(ctx)
 		cancel()
-
+	}()
+	go func() {
+		signalChan := make(chan os.Signal, 1)
+		signal.Notify(signalChan, os.Interrupt)
+		select {
+		case <-signalChan:
+			_ = srv.Shutdown(ctx)
+			cancel()
+		}
 	}()
 	<-ctx.Done()
 	fmt.Println("Registry service shutdown completed.")

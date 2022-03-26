@@ -26,10 +26,48 @@ func (r *registry) add(reg Registration) error {
 	r.mux.Unlock()
 	// 再 registrations 中查找 require service 兵 发送
 	err := r.sendRequiredServices(reg)
-	if err != nil {
-		return err
+	r.notify(patch{
+		Added: []patchEntry{
+			patchEntry{
+				Name: reg.ServiceName,
+				URL:  reg.ServiceURL,
+			},
+		},
+		Removed: []patchEntry{},
+	})
+	return err
+}
+
+func (r *registry) notify(fullPatch patch) {
+	r.mux.Lock()
+	defer r.mux.Unlock()
+	for _, reg := range r.registrations {
+		go func(reg Registration) {
+			for _, reqService := range reg.RequireServices {
+				p := patch{Added: []patchEntry{}, Removed: []patchEntry{}}
+				sendUpdate := false
+				for _, add := range fullPatch.Added {
+					if reqService == add.Name {
+						p.Added = append(p.Added, add)
+						sendUpdate = true
+					}
+				}
+				for _, remove := range fullPatch.Removed {
+					if reqService == remove.Name {
+						p.Removed = append(p.Removed, remove)
+						sendUpdate = true
+					}
+				}
+				if sendUpdate {
+					err := r.sendPatch(p, reg.ServiceUpdateURL)
+					if err != nil {
+						log.Println(err)
+						return
+					}
+				}
+			}
+		}(reg)
 	}
-	return nil
 }
 
 func (r *registry) sendRequiredServices(reg Registration) error {
