@@ -5,6 +5,7 @@ type Registration struct {
 	ServiceURL       string        `json:"service_url"`
 	RequireServices  []ServiceName `json:"require_services"`
 	ServiceUpdateURL string        `json:"service_update_url"`
+	HeartBeatURL     string        `json:"heartbeat_url"`
 }
 
 type ServiceName string

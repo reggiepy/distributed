@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"os/signal"
 )
 
 func Start(ctx context.Context, host, port string, reg registry.Registration, registryHandlerFunc func()) (context.Context, error) {
@@ -45,21 +43,21 @@ func startService(ctx context.Context, serviceName registry.ServiceName, host, p
 		}
 		cancel()
 	}()
-	go func() {
-		signalChan := make(chan os.Signal, 1)
-		//cleanupDone := make(chan bool)
-		signal.Notify(signalChan, os.Interrupt)
-		select {
-		case <-signalChan:
-			_ = srv.Shutdown(ctx)
-			err := registry.ShutdownService(fmt.Sprintf("http://%s:%s", host, port))
-			if err != nil {
-				log.Println(err)
-			}
-			cancel()
-			//cleanupDone <- true
-		}
-		//<-cleanupDone
-	}()
+	//go func() {
+	//	signalChan := make(chan os.Signal, 1)
+	//	//cleanupDone := make(chan bool)
+	//	signal.Notify(signalChan, os.Interrupt)
+	//	select {
+	//	case <-signalChan:
+	//		_ = srv.Shutdown(ctx)
+	//		err := registry.ShutdownService(fmt.Sprintf("http://%s:%s", host, port))
+	//		if err != nil {
+	//			log.Println(err)
+	//		}
+	//		cancel()
+	//		//cleanupDone <- true
+	//	}
+	//	//<-cleanupDone
+	//}()
 	return ctx
 }
