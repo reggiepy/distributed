@@ -74,6 +74,11 @@ func (h studentHandler) getOne(w http.ResponseWriter, r *http.Request, id int) {
 	studentsMutex.Lock()
 	defer studentsMutex.Unlock()
 	student, err := students.GetByID(id)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Printf("get student err: %q", err)
+		return
+	}
 	data, err := h.toJSON(student)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

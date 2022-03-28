@@ -132,7 +132,7 @@ func (r *registry) heartbeat(freq time.Duration) {
 			go func(reg Registration) {
 				defer wg.Done()
 				success := true
-				for attemps := 0; attemps < 3; attemps++ {
+				for attempts := 0; attempts < 3; attempts++ {
 					res, err := http.Get(reg.HeartBeatURL)
 					if err != nil {
 						log.Println(err)
