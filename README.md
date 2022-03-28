@@ -3,12 +3,13 @@
 [comment]: <> "[![Build Status]&#40;https://travis-ci.org/reggiepy/distributed.svg?branch=master&#41;]&#40;https://travis-ci.org/reggiepy/distributed&#41;"
 
 [comment]: <> "[![Coverage Status]&#40;https://coveralls.io/repos/github/reggiepy/distributed/badge.svg?branch=master&#41;]&#40;https://coveralls.io/github/reggiepy/distributed?branch=master&#41;"
-[![GitHub release](https://img.shields.io/badge/build-pass-success.svg?style=flat-square)]()[![Coverage Status](https://img.shields.io/badge/coverage-80%25-success.svg?style=flat-square)]()[![Go Report Card](https://goreportcard.com/badge/github.com/reggiepy/distributed)](https://goreportcard.com/report/github.com/reggiepy/distributed)
+[![go version](https://img.shields.io/badge/go-1.16-success.svg?style=flat-square)]()[![GitHub release](https://img.shields.io/badge/build-pass-success.svg?style=flat-square)]()[![Coverage Status](https://img.shields.io/badge/coverage-80%25-success.svg?style=flat-square)]()[![Go Report Card](https://goreportcard.com/badge/github.com/reggiepy/distributed)](https://goreportcard.com/report/github.com/reggiepy/distributed)
 
 ## Installation
 
 ```bash
 git clone https://github.com/reggiepy/distributed.git
+go mod tidy
 cd distributed
 ```
 
