@@ -1,4 +1,4 @@
-# golang 实现的简单分布式系统
+# golang Implemented Simple Distributed System
 
 [comment]: <> "[![Build Status]&#40;https://travis-ci.org/reggiepy/distributed.svg?branch=master&#41;]&#40;https://travis-ci.org/reggiepy/distributed&#41;"
 
