@@ -14,3 +14,8 @@ install:
 
 script:
   - echo "script"
+
+service_name: travis-pro
+repo_token: rNqra8rf3G6fQIrU82s1EhXzInxxmDsaz
+
+gem 'coveralls', require: false
