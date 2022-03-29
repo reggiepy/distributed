@@ -8,10 +8,10 @@
 
 [comment]: <> "[![Coverage Status]&#40;https://img.shields.io/badge/coverage-80%25-success.svg?style=flat&#41;]&#40;&#41;"
 
-[![go version](https://img.shields.io/github/go-mod/go-version/reggiepy/distributed?color=success&filename=go.mod&style=flat)]()
-[![release](https://img.shields.io/github/v/tag/reggiepy/distributed?color=success&label=release)]()
-[![build status](https://img.shields.io/badge/build-pass-success.svg?style=flat)]()
-[![License](https://img.shields.io/badge/license-GNU%203.0-success.svg?style=flat)]()
+[![go version](https://img.shields.io/github/go-mod/go-version/reggiepy/distributed?color=success&filename=go.mod&style=flat)](https://github.com/reggiepy/distributed)
+[![release](https://img.shields.io/github/v/tag/reggiepy/distributed?color=success&label=release)](https://github.com/reggiepy/distributed)
+[![build status](https://img.shields.io/badge/build-pass-success.svg?style=flat)](https://github.com/reggiepy/distributed)
+[![License](https://img.shields.io/badge/license-GNU%203.0-success.svg?style=flat)](https://github.com/reggiepy/distributed)
 [![Go Report Card](https://goreportcard.com/badge/github.com/reggiepy/distributed)](https://goreportcard.com/report/github.com/reggiepy/distributed)
 
 ## Installation
